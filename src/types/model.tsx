@@ -62,6 +62,15 @@ export type Screenshot = {
   width: number
   url: string
   image_id: string
+  type: 'screenshot'
+}
+
+export type Video = {
+  id: number
+  game: number
+  name: string
+  video_id: string
+  type: 'video'
 }
 
 export type Cover = {
@@ -75,11 +84,14 @@ export type Cover = {
   image_id: string
 }
 
-export type Video = {
+export type Genre = {
   id: number
-  game: number
+  created_at: number
   name: string
-  video_id: string
+  slug: string
+  updated_at: number
+  url: string
+  checksum: string
 }
 
 export type Game = {
@@ -93,6 +105,8 @@ export type Game = {
   collection: number
   cover: Cover
   external_games: number[]
+  first_release_date: number
+  genres: Genre[]
   name: string
   screenshots: Screenshot[]
   slug: string

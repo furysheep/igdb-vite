@@ -4,6 +4,7 @@ import '@fontsource/open-sans/700.css'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { QueryClient, QueryClientProvider } from 'react-query'
+import { BrowserRouter } from 'react-router-dom'
 import { ChakraProvider } from '@chakra-ui/react'
 import './index.css'
 import App from './App'
@@ -15,7 +16,9 @@ ReactDOM.render(
   <React.StrictMode>
     <ChakraProvider theme={theme}>
       <QueryClientProvider client={queryClient}>
-        <App />
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
       </QueryClientProvider>
     </ChakraProvider>
   </React.StrictMode>,
