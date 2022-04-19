@@ -6,15 +6,6 @@ import { useNavigate } from 'react-router-dom'
 type PropTypes = { game: Game }
 
 const GameItem = ({ game }: PropTypes) => {
-  const ratingImgUrl = game.age_ratings
-    ? new URL(
-        `../assets/ratings/${
-          AgeRatingsCategory[game.age_ratings[0].category]
-        }_${AgeRatingsRating[game.age_ratings[0].rating]}.svg`,
-        import.meta.url
-      ).href
-    : undefined
-
   const description = String(
     new Date(game.first_release_date * 1000).getFullYear()
   )
@@ -43,15 +34,6 @@ const GameItem = ({ game }: PropTypes) => {
       />
       <h1>{game.name}</h1>
       <h2>{description}</h2>
-      {ratingImgUrl && (
-        <Image
-          top="1"
-          left="1"
-          position="absolute"
-          src={ratingImgUrl}
-          width={14}
-        />
-      )}
     </GridItem>
   )
 }

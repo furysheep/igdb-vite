@@ -1,11 +1,11 @@
 export enum AgeRatingsCategory {
   ESRB = 1,
-  PEGI = 2,
-  CERO = 3,
-  USK = 4,
-  GRAC = 5,
-  CLASS_IND = 6,
-  ACB = 7,
+  PEGI,
+  CERO,
+  USK,
+  GRAC,
+  CLASS_IND,
+  ACB,
 }
 
 export enum AgeRatingsRating {
@@ -94,6 +94,24 @@ export type Genre = {
   checksum: string
 }
 
+export type Theme = {
+  id: number
+  name: string
+  slug: string
+}
+
+export type PlayerPerspective = {
+  id: number
+  name: string
+  slug: string
+}
+
+export type Website = {
+  id: number
+  category: number
+  url: string
+}
+
 export type Game = {
   id: number
   age_ratings: AgeRating[]
@@ -106,12 +124,41 @@ export type Game = {
   cover: Cover
   external_games: number[]
   first_release_date: number
+  involved_companies: InvolvedCompany[]
   genres: Genre[]
   name: string
+  player_perspectives: PlayerPerspective[]
   screenshots: Screenshot[]
   slug: string
   status: number
   summary: string
+  storyline: string
+  themes: Theme[]
+  total_rating: number
+  total_rating_count: number
   url: string
   videos: Video[]
+  websites: Website[]
+}
+
+export type Company = {
+  id: number
+  country: number
+  description: string
+  developed: number[]
+  logo: number
+  name: string
+  published: number[]
+  slug: string
+  start_date: number
+  start_date_category: number
+  websites: number[]
+}
+
+export type InvolvedCompany = {
+  company: Company
+  developer: boolean
+  porting: boolean
+  publisher: boolean
+  supporting: boolean
 }

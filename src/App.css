@@ -29,3 +29,17 @@
 button {
   font-size: calc(10px + 2vmin);
 }
+
+.thumbs {
+  display: flex;
+  justify-content: center;
+  /* align-items: center; */
+}
+
+.thumb img {
+  height: 100%;
+}
+
+.slide {
+  align-self: center;
+}
