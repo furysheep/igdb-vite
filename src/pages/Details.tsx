@@ -4,10 +4,13 @@ import {
   Container,
   Flex,
   Grid,
+  GridItem,
+  Heading,
   HStack,
   Image,
   Link,
   Tag,
+  VStack,
   Wrap,
   WrapItem,
 } from '@chakra-ui/react'
@@ -54,9 +57,13 @@ const Details = () => {
 
   const game = data[0]
   console.log(game)
-  const developer = game.involved_companies
-    ? game.involved_companies.find((c) => c.developer)
-    : null
+
+  const developers = game.involved_companies.filter(
+    (company) => company.developer
+  )
+  const publishers = game.involved_companies.filter(
+    (company) => company.publisher
+  )
 
   return (
     <Box>
@@ -113,11 +120,32 @@ const Details = () => {
                 'en-US'
               )}
             </div>
-            {developer && (
-              <Link as={RouterLink} to={`/company/${developer.company.slug}`}>
-                {developer.company.name}
-              </Link>
-            )}
+            <div>
+              Developers:{' '}
+              {developers.length > 0 &&
+                developers.map((developer) => (
+                  <Link
+                    key={developer.company.id}
+                    as={RouterLink}
+                    to={`/company/${developer.company.slug}`}
+                  >
+                    {developer.company.name}
+                  </Link>
+                ))}
+            </div>
+            <div>
+              Publishers:{' '}
+              {publishers.length > 0 &&
+                publishers.map((publisher) => (
+                  <Link
+                    key={publisher.company.id}
+                    as={RouterLink}
+                    to={`/company/${publisher.company.slug}`}
+                  >
+                    {publisher.company.name}
+                  </Link>
+                ))}
+            </div>
             <div>{'Genre: '}</div>
             <Wrap spacing={2}>
               {game.genres &&
@@ -131,6 +159,12 @@ const Details = () => {
                   </Tag>
                 ))}
             </Wrap>
+            <div>
+              {'Platforms: '}
+              {game.platforms &&
+                game.platforms.map((platform) => platform.name).join(', ')}
+            </div>
+
             <HStack mt={2} spacing={1}>
               {game.websites &&
                 game.websites.map((website) => (
@@ -159,29 +193,172 @@ const Details = () => {
           </Box>
         </Flex>
         <VideoImageCarousel game={game} />
-        <div>{'Themes: '}</div>
-        <Wrap spacing={2}>
-          {game.themes &&
-            game.themes.map((theme) => (
-              <Tag key={theme.id} as={RouterLink} to={`/themes/${theme.slug}`}>
-                {theme.name}
-              </Tag>
+        <Flex>
+          <Box flex="1" mr="5">
+            {game.storyline && (
+              <>
+                <Heading as="h2" mt="5">
+                  <div className="heading">Storyline</div>
+                </Heading>
+                <div>{game.storyline}</div>
+              </>
+            )}
+            <Heading as="h2" mt="5">
+              <div className="heading">Recommendations</div>
+            </Heading>
+            {game.similar_games.map((similar_game) => (
+              <GridItem
+                key={similar_game.id}
+                w="100%"
+                rounded="md"
+                // onClick={navigateGame}
+                position="relative"
+              >
+                <Image
+                  w="100%"
+                  mb="2"
+                  src={
+                    similar_game.cover
+                      ? `https://images.igdb.com/igdb/image/upload/t_cover_big/${similar_game.cover.image_id}.jpg`
+                      : NoImage
+                  }
+                />
+                <h1>{similar_game.name}</h1>
+                <h2>
+                  {String(
+                    new Date(
+                      similar_game.first_release_date * 1000
+                    ).getFullYear()
+                  )}
+                </h2>
+              </GridItem>
             ))}
-        </Wrap>
-        <div>{'Player Perspectives: '}</div>
-        <Wrap spacing={2}>
-          {game.player_perspectives.map((perspective) => (
-            <Tag
-              key={perspective.id}
-              as={RouterLink}
-              to={`/player_perspectives/${perspective.slug}`}
-            >
-              {perspective.name}
-            </Tag>
-          ))}
-        </Wrap>
-        {game.storyline && <div>{game.storyline}</div>}
-        Similar games
+          </Box>
+          <Box w="300px">
+            <div>{'Game Modes: '}</div>
+            <Wrap spacing={2}>
+              {game.game_modes &&
+                game.game_modes.map((mode) => (
+                  <Tag
+                    key={mode.id}
+                    as={RouterLink}
+                    to={`/game_modes/${mode.slug}`}
+                  >
+                    {mode.name}
+                  </Tag>
+                ))}
+            </Wrap>
+            {game.multiplayer_modes && (
+              <>
+                <div>{'Multiplayer Modes: '}</div>
+                <div>
+                  Offline Co-op max players:{' '}
+                  {game.multiplayer_modes[0].offlinecoopmax}
+                </div>
+                <div>
+                  Online Co-op max players:{' '}
+                  {game.multiplayer_modes[0].onlinecoopmax}
+                </div>
+                <div>
+                  Online max players: {game.multiplayer_modes[0].onlinemax}
+                </div>
+                <div>
+                  Offline max players: {game.multiplayer_modes[0].offlinemax}
+                </div>
+                <div>
+                  Offline Co-op:{' '}
+                  {game.multiplayer_modes[0].offlinecoop ? 'Yes' : 'No'}
+                </div>
+                <div>
+                  Online Co-op:{' '}
+                  {game.multiplayer_modes[0].onlinecoop ? 'Yes' : 'No'}
+                </div>
+                <div>
+                  LAN Co-op: {game.multiplayer_modes[0].lancoop ? 'Yes' : 'No'}
+                </div>
+                <div>
+                  Co-op Campaign:{' '}
+                  {game.multiplayer_modes[0].campaigncoop ? 'Yes' : 'No'}
+                </div>
+                <div>
+                  Online Split-Screen:{' '}
+                  {game.multiplayer_modes[0].splitscreenonline ? 'Yes' : 'No'}
+                </div>
+                <div>
+                  Offline Split-Screen:{' '}
+                  {game.multiplayer_modes[0].splitscreen ? 'Yes' : 'No'}
+                </div>
+                <div>Drop in/out: {game.multiplayer_modes[0].dropin}</div>
+              </>
+            )}
+            <div>{'Themes: '}</div>
+            <Wrap spacing={2}>
+              {game.themes &&
+                game.themes.map((theme) => (
+                  <Tag
+                    key={theme.id}
+                    as={RouterLink}
+                    to={`/themes/${theme.slug}`}
+                  >
+                    {theme.name}
+                  </Tag>
+                ))}
+            </Wrap>
+            {game.collection && (
+              <>
+                <div>
+                  {'Series: '}
+                  <Link
+                    as={RouterLink}
+                    to={`/collections/${game.collection.slug}`}
+                  >
+                    {game.collection.name}
+                  </Link>
+                </div>
+              </>
+            )}
+            <div>{'Player Perspectives: '}</div>
+            <Wrap spacing={2}>
+              {game.player_perspectives.map((perspective) => (
+                <Tag
+                  key={perspective.id}
+                  as={RouterLink}
+                  to={`/player_perspectives/${perspective.slug}`}
+                >
+                  {perspective.name}
+                </Tag>
+              ))}
+            </Wrap>
+            {game.franchises && (
+              <>
+                <div>{'Franchises: '}</div>
+                {game.franchises.map((franchise) => (
+                  <Link
+                    key={franchise.slug}
+                    as={RouterLink}
+                    to={`/franchises/${franchise.slug}`}
+                  >
+                    {franchise.name}
+                  </Link>
+                ))}
+              </>
+            )}
+            {game.game_engines && (
+              <>
+                <div>{'Game engine: '}</div>
+                {game.game_engines.map((engine) => (
+                  <Link
+                    key={engine.slug}
+                    as={RouterLink}
+                    to={`/game_engines/${engine.slug}`}
+                  >
+                    {engine.name}
+                  </Link>
+                ))}
+              </>
+            )}
+          </Box>
+        </Flex>
       </Container>
     </Box>
   )

@@ -112,6 +112,56 @@ export type Website = {
   url: string
 }
 
+export type MultiplayerMode = {
+  campaigncoop: boolean
+  dropin: boolean
+  lancoop: boolean
+  offlinecoop: boolean
+  offlinecoopmax: number
+  onlinecoop: boolean
+  onlinecoopmax: number
+  onlinemax: number
+  offlinemax: number
+  platform: number
+  splitscreen: boolean
+  splitscreenonline: boolean
+}
+
+export type GameMode = {
+  id: number
+  name: string
+  slug: string
+}
+
+export type Collection = {
+  games: number[]
+  name: string
+  slug: string
+}
+
+export type Franchise = {
+  games: number[]
+  name: string
+  slug: string
+}
+
+export type GameEngine = {
+  id: number
+  name: string
+  slug: string
+}
+
+export type Platform = {
+  abbreviation: string
+  alternative_name: string
+  category: number
+  generation: number
+  name: string
+  platform_family: number
+  platform_logo: number
+  slug: string
+}
+
 export type Game = {
   id: number
   age_ratings: AgeRating[]
@@ -120,14 +170,19 @@ export type Game = {
   alternative_names: number[]
   bundles: number[]
   category: number
-  collection: number
+  collection: Collection
   cover: Cover
   external_games: number[]
   first_release_date: number
+  franchises: Franchise[]
   involved_companies: InvolvedCompany[]
+  game_modes: GameMode[]
+  game_engines: GameEngine[]
   genres: Genre[]
   name: string
+  multiplayer_modes: MultiplayerMode[]
   player_perspectives: PlayerPerspective[]
+  platforms: Platform[]
   screenshots: Screenshot[]
   slug: string
   status: number
@@ -139,6 +194,7 @@ export type Game = {
   url: string
   videos: Video[]
   websites: Website[]
+  similar_games: Game[]
 }
 
 export type Company = {
