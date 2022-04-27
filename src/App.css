@@ -44,11 +44,11 @@ button {
   align-self: center;
 }
 
-h2 {
+h3 {
   border-bottom: 2px solid white;
 }
 
-h2 > .heading {
+h3 > .heading {
   background-color: black;
   color: white;
   display: inline-block;

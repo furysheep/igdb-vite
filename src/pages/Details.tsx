@@ -197,13 +197,13 @@ const Details = () => {
           <Box flex="1" mr="5">
             {game.storyline && (
               <>
-                <Heading as="h2" mt="5">
+                <Heading as="h3" mt="5">
                   <div className="heading">Storyline</div>
                 </Heading>
                 <div>{game.storyline}</div>
               </>
             )}
-            <Heading as="h2" mt="5">
+            <Heading as="h3" mt="5">
               <div className="heading">Recommendations</div>
             </Heading>
             {game.similar_games.map((similar_game) => (
