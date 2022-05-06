@@ -1,4 +1,5 @@
 import {
+  chakra,
   Box,
   Center,
   Container,
@@ -8,12 +9,14 @@ import {
   Heading,
   HStack,
   Image,
+  Img,
   Link,
   Tag,
   VStack,
   Wrap,
   WrapItem,
 } from '@chakra-ui/react'
+import { Scroll, Keyframes, SpringConfigs } from 'scrollex'
 import { API_DOMAIN } from 'constants'
 import useFetch from 'hooks/useFetch'
 import { Link as RouterLink, useParams } from 'react-router-dom'
@@ -26,6 +29,10 @@ import VideoImageCarousel from 'components/GameModal/Carousel'
 type DetailsParams = {
   gameId: string
 }
+
+const ScrollItem = chakra(Scroll.Item)
+const ScrollSection = chakra(Scroll.Section)
+const ScrollContainer = chakra(Scroll.Container)
 
 const Details = () => {
   const { gameId } = useParams<DetailsParams>()
@@ -43,6 +50,8 @@ const Details = () => {
     body: findGameBySlug(gameId),
   })
 
+  console.log(data)
+
   if (error) {
     return <div>Error</div>
   }
@@ -58,12 +67,12 @@ const Details = () => {
   const game = data[0]
   console.log(game)
 
-  const developers = game.involved_companies.filter(
-    (company) => company.developer
-  )
-  const publishers = game.involved_companies.filter(
-    (company) => company.publisher
-  )
+  const developers = game.involved_companies
+    ? game.involved_companies.filter((company) => company.developer)
+    : []
+  const publishers = game.involved_companies
+    ? game.involved_companies.filter((company) => company.publisher)
+    : []
 
   return (
     <Box>
@@ -206,33 +215,52 @@ const Details = () => {
             <Heading as="h3" mt="5">
               <div className="heading">Recommendations</div>
             </Heading>
-            {game.similar_games.map((similar_game) => (
-              <GridItem
-                key={similar_game.id}
-                w="100%"
-                rounded="md"
-                // onClick={navigateGame}
-                position="relative"
-              >
-                <Image
-                  w="100%"
-                  mb="2"
-                  src={
-                    similar_game.cover
-                      ? `https://images.igdb.com/igdb/image/upload/t_cover_big/${similar_game.cover.image_id}.jpg`
-                      : NoImage
-                  }
-                />
-                <h1>{similar_game.name}</h1>
-                <h2>
-                  {String(
-                    new Date(
-                      similar_game.first_release_date * 1000
-                    ).getFullYear()
-                  )}
-                </h2>
-              </GridItem>
-            ))}
+            <ScrollContainer
+              scrollAxis="x"
+              throttleAmount={0}
+              width="100%"
+              height="440px"
+              px={4}
+            >
+              {game.similar_games &&
+                game.similar_games.map((similar_game) => (
+                  <ScrollSection height="440px" mx={4}>
+                    <Box h="100%" display="inline-flex" alignItems="center">
+                      <Box overflow="hidden">
+                        <ScrollItem>
+                          <Box
+                            key={similar_game.id}
+                            w="100%"
+                            rounded="md"
+                            // onClick={navigateGame}
+                            position="relative"
+                          >
+                            <Img
+                              w="200px"
+                              h="300px"
+                              objectFit="cover"
+                              mb="2"
+                              src={
+                                similar_game.cover
+                                  ? `https://images.igdb.com/igdb/image/upload/t_cover_big/${similar_game.cover.image_id}.jpg`
+                                  : NoImage
+                              }
+                            />
+                          </Box>
+                        </ScrollItem>
+                        <h1>{similar_game.name}</h1>
+                        <h2>
+                          {String(
+                            new Date(
+                              similar_game.first_release_date * 1000
+                            ).getFullYear()
+                          )}
+                        </h2>
+                      </Box>
+                    </Box>
+                  </ScrollSection>
+                ))}
+            </ScrollContainer>
           </Box>
           <Box w="300px">
             <div>{'Game Modes: '}</div>
@@ -319,15 +347,16 @@ const Details = () => {
             )}
             <div>{'Player Perspectives: '}</div>
             <Wrap spacing={2}>
-              {game.player_perspectives.map((perspective) => (
-                <Tag
-                  key={perspective.id}
-                  as={RouterLink}
-                  to={`/player_perspectives/${perspective.slug}`}
-                >
-                  {perspective.name}
-                </Tag>
-              ))}
+              {game.player_perspectives &&
+                game.player_perspectives.map((perspective) => (
+                  <Tag
+                    key={perspective.id}
+                    as={RouterLink}
+                    to={`/player_perspectives/${perspective.slug}`}
+                  >
+                    {perspective.name}
+                  </Tag>
+                ))}
             </Wrap>
             {game.franchises && (
               <>

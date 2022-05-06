@@ -20,7 +20,6 @@ const YoutubeSlide = ({ url, isSelected }: SlidePropTypes) => (
 const ImageSlide = ({ url }: SlidePropTypes) => <Image src={url} />
 
 const VideoImageCarousel = ({ game }: PropTypes) => {
-  console.log(game)
   const customRenderItem = (item: any, props: any) => (
     <item.type {...item.props} {...props} />
   )
@@ -46,10 +45,11 @@ const VideoImageCarousel = ({ game }: PropTypes) => {
       )
     })
 
-  let slides: (Screenshot | Video)[] = game.videos?.map((video) => ({
-    ...video,
-    type: 'video',
-  }))
+  let slides: (Screenshot | Video)[] =
+    game.videos?.map((video) => ({
+      ...video,
+      type: 'video',
+    })) ?? []
   slides = slides.concat(
     game.screenshots?.map((image) => ({ ...image, type: 'screenshot' }))
   )
